@@ -21,6 +21,7 @@
 
 /* choose the appropriate stat and fstat functions and return structs */
 /* This code taken from Python's posixmodule.c */
+#define LONG_LONG long long
 #undef STAT
 #if defined(MS_WIN64) || defined(MS_WIN32)
 #	define STAT _stati64

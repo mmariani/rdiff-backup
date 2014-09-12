@@ -16,14 +16,14 @@ setup(name="rdiff-backup",
 	  author_email="bescoto@stanford.edu",
 	  url="http://rdiff-backup.stanford.edu",
 	  packages = ['rdiff_backup'],
-	  ext_modules = [Extension("rdiff_backup.C", ["cmodule.c"]),
+	  ext_modules = [Extension("rdiff_backup.C", ["src/cmodule.c"]),
 					 Extension("rdiff_backup._librsync",
-							   ["_librsyncmodule.c"],
+							   ["rdiff_backup/_librsyncmodule.c"],
 							   libraries=["rsync"])],
 	  scripts = ['rdiff-backup'],
 	  data_files = [('share/man/man1', ['rdiff-backup.1']),
 					('share/doc/rdiff-backup-%s' % version_string,
-					 ['CHANGELOG', 'COPYING', 'README', 'FAQ.html'])])
+					 ['CHANGELOG', 'COPYING', 'README', 'FAQ-body.html'])])
 
 
 
