@@ -12,6 +12,7 @@
 
 from __future__ import generators
 import types, os, tempfile, cPickle, shutil, traceback, pickle, socket
+import rpath
 
 
 class ConnectionError(Exception): pass
