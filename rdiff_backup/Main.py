@@ -1,4 +1,5 @@
 # Copyright 2002 Ben Escoto
+# vim: set nolist noet ts=4:
 #
 # This file is part of rdiff-backup.
 #

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# vim: set nolist noet ts=4:
 
 """Run rdiff-backup with profiling on
 

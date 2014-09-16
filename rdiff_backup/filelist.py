@@ -1,3 +1,4 @@
+# vim: set nolist noet ts=4:
 from __future__ import generators
 execfile("manage.py")
 

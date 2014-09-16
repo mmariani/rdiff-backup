@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# vim: set nolist noet ts=4:
 #
 # rdiff-backup -- Mirror files while keeping incremental changes
 # Version 0.8.0 released June 14, 2002
