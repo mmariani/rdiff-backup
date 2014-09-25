@@ -21,7 +21,7 @@
 
 from __future__ import generators
 import tempfile, os, cStringIO
-import static, rorpiter, FilenameMapping
+import static, rorpiter, FilenameMapping, connection
 
 class RestoreError(Exception): pass
 
@@ -32,7 +32,9 @@ def Restore(mirror_rp, inc_rpath, target, restore_to_time):
 
 	MirrorS.set_mirror_and_rest_times(restore_to_time)
 	MirrorS.initialize_rf_cache(mirror_rp, inc_rpath)
-	target_iter = TargetS.get_initial_iter(target)
+#	we run this locally to retrieve RPath instead of RORPath objects
+#	target_iter = TargetS.get_initial_iter(target)
+	target_iter = selection.Select(target).set_iter()
 	diff_iter = MirrorS.get_diffs(target_iter)
 	TargetS.patch(target, diff_iter)
 	MirrorS.close_rf_cache()
@@ -252,14 +254,28 @@ class MirrorStruct:
 
 	def get_diff(cls, mir_rorp, target_rorp):
 		"""Get a diff for mir_rorp at time"""
+		delta_fp = None
 		if not mir_rorp: mir_rorp = rpath.RORPath(target_rorp.index)
 		elif Globals.preserve_hardlinks and Hardlink.islinked(mir_rorp):
 			mir_rorp.flaglinked(Hardlink.get_link_index(mir_rorp))
 		elif mir_rorp.isreg():
 			expanded_index = cls.mirror_base.index + mir_rorp.index
 			file_fp = cls.rf_cache.get_fp(expanded_index, mir_rorp)
-			mir_rorp.setfile(hash.FileWrapper(file_fp))
+			if (target_rorp):
+				# a file is already there, we can create a diff
+				signature_vf = target_rorp.conn.Rdiff.get_signature_vf(target_rorp)
+				target_signature = connection.VirtualFile(target_rorp.conn, signature_vf)
+				delta_fp = mir_rorp.get_delta(target_signature, open(file_fp.name, 'rb'))
+				mir_rorp.setfile(delta_fp)
+			else:
+				# standard rdiff-backup behavior, transfer everything
+				mir_rorp.setfile(hash.FileWrapper(file_fp))
+
 		mir_rorp.set_attached_filetype('snapshot')
+
+		if delta_fp:
+			mir_rorp.set_attached_filetype('diff')
+
 		return mir_rorp
 
 static.MakeClass(MirrorStruct)
@@ -464,7 +480,8 @@ class RestoreFile:
 				log.Log("Applying patch %s" % (inc_diff.get_indexpath(),), 7)
 				assert inc_diff.getinctype() == 'diff'
 				delta_fp = inc_diff.open("rb", inc_diff.isinccompressed())
-				new_fp = tempfile.TemporaryFile()
+				# the temporary file must be named to provide a second file handler later
+				new_fp = tempfile.NamedTemporaryFile()
 				Rdiff.write_patched_fp(current_fp, delta_fp, new_fp)
 				new_fp.seek(0)
 				current_fp = new_fp
@@ -494,7 +511,8 @@ rdiff-backup destination directory, or a bug in rdiff-backup""" %
 		if not first_inc.isinccompressed(): return first_inc.open("rb")
 
 		# current_fp must be a real (uncompressed) file
-		current_fp = tempfile.TemporaryFile()
+		# the temporary file must be named to provide a second file handler later
+		current_fp = tempfile.NamedTemporaryFile()
 		fp = first_inc.open("rb", compress = 1)
 		rpath.copyfileobj(fp, current_fp)
 		assert not fp.close()

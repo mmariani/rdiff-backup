@@ -134,7 +134,8 @@ def set_allowed_requests(sec_level):
 		 "Log.log_to_file", "FilenameMapping.set_init_quote_vals_local",
 		 "FilenameMapping.set_init_quote_vals", "Time.setcurtime_local",
 		 "SetConnections.add_redirected_conn", "RedirectedRun",
-		 "sys.stdout.write", "robust.install_signal_handlers"]
+		 "sys.stdout.write", "robust.install_signal_handlers",
+		 "Rdiff.get_signature_vf"]
 	if (sec_level == "read-only" or sec_level == "update-only" or
 		sec_level == "all"):
 		l.extend(["rpath.make_file_dict", "os.listdir", "rpath.ea_get",

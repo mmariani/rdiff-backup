@@ -20,7 +20,7 @@
 """Invoke rdiff utility to make signatures, deltas, or patch"""
 
 import os, librsync
-import Globals, log, static, TempFile, rpath, hash
+import connection, Globals, log, static, TempFile, rpath, hash
 
 
 def get_signature(rp, blocksize = None):
@@ -29,6 +29,13 @@ def get_signature(rp, blocksize = None):
 	log.Log("Getting signature of %s with blocksize %s" %
 			(rp.get_indexpath(), blocksize), 7)
 	return librsync.SigFile(rp.open("rb"), blocksize)
+
+def get_signature_vf(rorp):
+	size = os.path.getsize(rorp.path)
+	file2 = open(rorp.path, 'rb')
+	signature_fp = librsync.SigFile(file2, find_blocksize(size))
+	vf = connection.VirtualFile.new(signature_fp)
+	return vf
 
 def find_blocksize(file_len):
 	"""Return a reasonable block size to use on files of length file_len

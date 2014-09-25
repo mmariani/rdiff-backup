@@ -36,7 +36,10 @@ are dealing with are local or remote.
 """
 
 import os, stat, re, sys, shutil, gzip, socket, time, errno
-import Globals, Time, static, log, user_group, C
+import Globals, Time, static, log, user_group, C, hash
+
+import librsync
+
 
 try:
 	import win32file, winnt
@@ -408,6 +411,7 @@ class RORPath:
 	"""
 	def __init__(self, index, data = None):
 		self.index = index
+		# signature can be read only once
 		if data: self.data = data
 		else: self.data = {'type':None} # signify empty file
 		self.file = None
@@ -707,6 +711,11 @@ class RORPath:
 	def set_attached_filetype(self, type):
 		"""Set the type of the attached file"""
 		self.data['filetype'] = type
+
+	def get_delta(self, signature_fp, new_fp):
+		delta = librsync.DeltaFile(signature_fp,
+									hash.FileWrapper(new_fp))
+		return delta
 
 	def isflaglinked(self):
 		"""True if rorp is a signature/diff for a hardlink file
