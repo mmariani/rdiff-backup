@@ -2,8 +2,11 @@
 
 import sys, os, getopt
 from distutils.core import setup, Extension
+# for python setup.py develop (but won't install manpages)
+# from setuptools import setup, Extension
 
-version_string = "$version"
+import rdiff_backup
+version_string = rdiff_backup.version
 
 if sys.version_info[:2] < (2,2):
 	print "Sorry, rdiff-backup requires version 2.2 or later of python"
@@ -65,9 +68,9 @@ setup(name="rdiff-backup",
 	  author_email="rdiff-backup@emerose.org",
 	  url="http://rdiff-backup.nongnu.org/",
 	  packages = ['rdiff_backup'],
-	  ext_modules = [Extension("rdiff_backup.C", ["cmodule.c"]),
+	  ext_modules = [Extension("rdiff_backup.C", ["rdiff_backup/cmodule.c"]),
 					 Extension("rdiff_backup._librsync",
-							   ["_librsyncmodule.c"],
+							   ["rdiff_backup/_librsyncmodule.c"],
 							   include_dirs=incdir_list,
 							   library_dirs=libdir_list,
 							   libraries=libname,
@@ -76,6 +79,6 @@ setup(name="rdiff-backup",
 	  data_files = [('share/man/man1', ['rdiff-backup.1',
 										'rdiff-backup-statistics.1']),
 					('share/doc/rdiff-backup-%s' % (version_string,),
-					 ['CHANGELOG', 'COPYING', 'README', 'FAQ.html'])],
+					 ['CHANGELOG', 'COPYING', 'README', 'FAQ-body.html'])],
 					**extra_options)
 
