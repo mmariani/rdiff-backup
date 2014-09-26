@@ -1,0 +1,9 @@
+build/
+rdiff_backup/C.so
+rdiff_backup/_librsync.so
+dist/rdiff-backup-*.tar.gz
+.DS_Store
+MANIFEST
+*.egg-info
+*.pyc
+*.pyo

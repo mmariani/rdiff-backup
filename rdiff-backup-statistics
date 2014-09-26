@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# vim: set nolist noet ts=4:
 # rdiff-backup-statistics -- Summarize rdiff-backup statistics files
 # Version $version released $date
 # Copyright 2005 Dean Gaudet, Ben Escoto

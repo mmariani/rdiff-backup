@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# vim: set nolist noet ts=4:
 # rdiff-backup -- Mirror files while keeping incremental changes
 # Version $version released $date
 # Copyright (C) 2001-2005  Ben Escoto <rdiff-backup@emerose.org>

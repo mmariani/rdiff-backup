@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# vim: set nolist noet ts=4:
 
 import sys, os, getopt
 from distutils.core import setup, Extension

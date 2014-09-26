@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# vim: set nolist noet ts=4:
 
 """Like rdiff, but written in python and uses librsync module.
 
