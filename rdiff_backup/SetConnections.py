@@ -230,8 +230,10 @@ def BackupInitConnections(reading_conn, writing_conn):
 	"""Backup specific connection initialization"""
 	reading_conn.Globals.set("isbackup_reader", 1)
 	writing_conn.Globals.set("isbackup_writer", 1)
+	writing_conn.Globals.set("always_snapshot", Globals.always_snapshot)
 	UpdateGlobal("backup_reader", reading_conn)
 	UpdateGlobal("backup_writer", writing_conn)
+	UpdateGlobal("always_snapshot", Globals.always_snapshot)
 
 def CloseConnections():
 	"""Close all connections.  Run by client"""

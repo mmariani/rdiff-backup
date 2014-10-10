@@ -58,6 +58,9 @@ except AttributeError:
 	process_gid = 0
 	process_groups = [0]
 
+# These files will always be transferred completely (i.e. in case of backup corruption).
+always_snapshot = []
+
 # If true, when copying attributes, also change target's uid/gid
 change_ownership = None
 

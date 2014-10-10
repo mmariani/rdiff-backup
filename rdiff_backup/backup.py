@@ -333,6 +333,8 @@ class CacheCollatedPostProcess:
 		self.cache_indicies.append(index)
 
 		if len(self.cache_indicies) > self.cache_size: self.shorten_cache()
+		if source_rorp and source_rorp.index in Globals.always_snapshot:
+			dest_rorp = None
 		return source_rorp, dest_rorp
 
 	def pre_process(self, source_rorp, dest_rorp):

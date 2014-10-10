@@ -60,6 +60,7 @@ def parse_cmdlineoptions(arglist):
 
 	try: optlist, args = getopt.getopt(arglist, "blr:sv:V",
 		 ["backup-mode", "calculate-average", "carbonfile",
+		  "always-snapshot=", "always-snapshot-fromfile=",
 		  "check-destination-dir",
 		  "compare", "compare-at-time=", "compare-hash",
 		  "compare-hash-at-time=", "compare-full", "compare-full-at-time=",
@@ -130,6 +131,11 @@ def parse_cmdlineoptions(arglist):
 			select_files.append(sys.stdin)
 		elif opt == "--force": force = 1
 		elif opt == "--group-mapping-file": group_mapping_filename = arg
+		elif opt == "--always-snapshot":
+			Globals.always_snapshot.append(tuple(arg.split('/')))
+		elif opt == "--always-snapshot-fromfile":
+			with open(arg, 'rb') as fin:
+				Globals.always_snapshot.extend(tuple(line.strip('\n').split('/')) for line in fin.xreadlines())
 		elif (opt == "--include" or
 			  opt == "--include-special-files" or
 			  opt == "--include-symbolic-links"):
